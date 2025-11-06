@@ -116,3 +116,45 @@ function set_product_main_image_ctr(int $product_id, string $path, bool $force =
 {
     return get_product_model()->setMainImage($product_id, $path, $force);
 }
+
+// NEW METHODS FOR ENHANCED FUNCTIONALITY
+
+/**
+ * View all products with pagination
+ */
+function view_all_products_ctr(int $limit = 100, int $offset = 0): array
+{
+    return get_product_model()->view_all_products($limit, $offset);
+}
+
+/**
+ * Search products by query
+ */
+function search_products_ctr(string $query, int $limit = 100, int $offset = 0): array
+{
+    return get_product_model()->search_products($query, $limit, $offset);
+}
+
+/**
+ * Filter products by category
+ */
+function filter_products_by_category_ctr(int $cat_id, int $limit = 100, int $offset = 0): array
+{
+    return get_product_model()->filter_products_by_category($cat_id, $limit, $offset);
+}
+
+/**
+ * Filter products by brand
+ */
+function filter_products_by_brand_ctr(int $brand_id, int $limit = 100, int $offset = 0): array
+{
+    return get_product_model()->filter_products_by_brand($brand_id, $limit, $offset);
+}
+
+/**
+ * View single product with full details
+ */
+function view_single_product_ctr(int $id): array
+{
+    return get_product_model()->view_single_product($id);
+}

@@ -306,26 +306,26 @@ body{
 
     <div class="sdbar__group">
       <a href="category.php" class="sdbar__item">
-        <span class="sdbar__icon"><i class="bi bi-speedometer2"></i></span>
+        <span class="sdbar__icon"><i class="bi bi-folder2"></i></span>
         <span>Category Management</span>
       </a>
       <a href="brand.php" class="sdbar__item sdbar__item--active">
-        <span class="sdbar__icon"><i class="bi bi-folder2"></i></span>
+        <span class="sdbar__icon"><i class="bi bi-tags"></i></span>
         <span>Brand Management</span>
       </a>
       <a href="product.php" class="sdbar__item">
-        <span class="sdbar__icon"><i class="bi bi-tags"></i></span>
+        <span class="sdbar__icon"><i class="bi bi-box-seam"></i></span>
         <span>Product Management</span>
       </a>
       <a href="../view/all_product.php" class="sdbar__item">
-        <span class="sdbar__icon"><i class="bi bi-box-seam"></i></span>
+        <span class="sdbar__icon"><i class="bi bi-grid"></i></span>
         <span>Product Display</span>
       </a>
     </div>
 
-    <a href="#" class="sdbar__item sdbar__settings">
-      <span class="sdbar__icon"><i class="bi bi-gear"></i></span>
-      <span>Settings</span>
+    <a href="../actions/logout.php" class="sdbar__item sdbar__settings">
+      <span class="sdbar__icon"><i class="bi bi-box-arrow-right"></i></span>
+      <span>Logout</span>
     </a>
   </aside>
 
@@ -337,8 +337,8 @@ body{
         <div class="page-title">Manage Brands</div>
         <div class="page-sub">Add, edit, and organize your brand portfolio</div>
       </div>
-      <a href="category.php" class="btn btn-outline-secondary rounded-circle" style="width:44px;height:44px" title="Back to Categories">
-        <i class="bi bi-arrow-left"></i>
+      <a href="../actions/logout.php" class="btn btn-outline-danger" title="Logout">
+        <i class="bi bi-box-arrow-right"></i> Logout
       </a>
     </div>
 

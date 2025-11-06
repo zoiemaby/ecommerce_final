@@ -24,6 +24,7 @@ require_once '../controllers/category_controller.php';
     <!-- <script src="../assets/js/category.js"></script> -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
 
     <style>
       :root{
@@ -371,25 +372,22 @@ body{
 
     <nav class="sdbar__group">
       <a href="category.php" class="sdbar__item sdbar__item--active">
-        <span class="sdbar__icon">➕</span> <span>Category Management</span>
+        <span class="sdbar__icon"><i class="bi bi-folder2"></i></span> <span>Category Management</span>
       </a>
       <a href="brand.php" class="sdbar__item">
-        <span class="sdbar__icon">➕</span> <span>Brand Management</span>
+        <span class="sdbar__icon"><i class="bi bi-tags"></i></span> <span>Brand Management</span>
       </a>
       <a href="product.php" class="sdbar__item">
-        <span class="sdbar__icon">➕</span> <span>Product Management</span>
+        <span class="sdbar__icon"><i class="bi bi-box-seam"></i></span> <span>Product Management</span>
       </a>
       <a href="../view/all_product.php" class="sdbar__item">
-        <span class="sdbar__icon">➕</span> <span>Products Display</span>
-      </a>
-      <a href="#" class="sdbar__item">
-        <span class="sdbar__icon">➕</span> <span>Customers</span>
+        <span class="sdbar__icon"><i class="bi bi-grid"></i></span> <span>Product Display</span>
       </a>
     </nav>
 
     <nav class="sdbar__group sdbar__settings">
-      <a href="#" class="sdbar__item">
-        <span class="sdbar__icon">⚙️</span> <span>Settings</span>
+      <a href="../actions/logout.php" class="sdbar__item">
+        <span class="sdbar__icon"><i class="bi bi-box-arrow-right"></i></span> <span>Logout</span>
       </a>
     </nav>
   </aside>
@@ -397,27 +395,6 @@ body{
     <div class="app">
       <!-- Top bar -->
       <div class="topbar">
-        <a href="../index.php" class="back-btn" aria-label="Back to Login Page">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
-            <path d="M19 12H5M12 19l-7-7 7-7" />
-          </svg>
-        </a>
-
-        <div class="page-title">
-          <h1>Create New Category</h1>
-          <div class="page-sub">Quickly add a new Category — it will appear in the category list.</div>
-        </div>
-
-        <div>
-          <button class="profile-btn" aria-label="Profile">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
-              stroke-linecap="round" stroke-linejoin="round" style="color:var(--primary)">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-              <circle cx="12" cy="7" r="4"></circle>
-            </svg>
-          </button>
-        </div>
       </div>
 
       <!-- Main cards container -->

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>All Products — Z's Storefront</title>
+<title>Search Results — Z's Storefront</title>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
@@ -29,10 +29,9 @@ body{background:var(--bg);color:var(--ink);font-family:ui-sans-serif,system-ui,-
 .pagination .page-link{border-radius:10px;border:1px solid var(--line);color:var(--ink);font-weight:500}
 .pagination .page-item.active .page-link{background:var(--ink);border-color:var(--ink)}
 #loader{text-align:center;padding:48px;color:var(--sub)}
-.skeleton{background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);background-size:200% 100%;animation:loading 1.5s ease-in-out infinite}
-@keyframes loading{0%{background-position:200% 0}100%{background-position:-200% 0}}
 .empty-state{text-align:center;padding:48px 24px;color:var(--sub)}
 .empty-state i{font-size:64px;color:#cbd5e1;margin-bottom:16px}
+.search-highlight{background:#fef3c7;padding:2px 4px;border-radius:4px}
 </style>
 </head>
 <body>
@@ -46,7 +45,7 @@ body{background:var(--bg);color:var(--ink);font-family:ui-sans-serif,system-ui,-
     </button>
     <div id="nav" class="collapse navbar-collapse">
       <ul class="navbar-nav me-auto">
-        <li class="nav-item"><a class="nav-link active" href="all_product.php">All Products</a></li>
+        <li class="nav-item"><a class="nav-link" href="all_product.php">All Products</a></li>
         <li class="nav-item"><a class="nav-link" href="register.php">Register</a></li>
         <li class="nav-item"><a class="nav-link" href="login.php">Login</a></li>
       </ul>
@@ -67,13 +66,19 @@ body{background:var(--bg);color:var(--ink);font-family:ui-sans-serif,system-ui,-
   <div class="hero">
     <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
       <div>
-        <h1 class="h3 fw-bold mb-1">All Products</h1>
-        <div class="text-muted">Browse, filter, and discover the latest in our catalog</div>
+        <h1 class="h3 fw-bold mb-1">
+          Search Results: <span id="searchQueryDisplay" class="text-primary"></span>
+        </h1>
+        <div class="text-muted">
+          Found <span id="totalCount" class="fw-bold">0</span> products
+        </div>
       </div>
-      <div class="d-flex gap-2 align-items-center">
-        <span class="badge bg-secondary" id="totalCount">0 products</span>
-        <button class="btn btn-outline-secondary btn-sm" id="btnResetFilters" style="display:none">
-          <i class="bi bi-x-circle"></i> Reset Filters
+      <div class="d-flex gap-2">
+        <a href="all_product.php" class="btn btn-outline-secondary btn-sm">
+          <i class="bi bi-arrow-left"></i> All Products
+        </a>
+        <button class="btn btn-outline-secondary btn-sm" id="btnClearSearch">
+          <i class="bi bi-x-circle"></i> Clear Search
         </button>
       </div>
     </div>
@@ -84,13 +89,13 @@ body{background:var(--bg);color:var(--ink);font-family:ui-sans-serif,system-ui,-
 <section class="container container-narrow mb-3">
   <div class="filters d-flex flex-wrap align-items-center gap-3">
     <div class="flex-fill" style="min-width:200px">
-      <label class="form-label small text-muted mb-1">Category</label>
+      <label class="form-label small text-muted mb-1">Narrow by Category</label>
       <select id="filterCategory" class="form-select">
         <option value="">All Categories</option>
       </select>
     </div>
     <div class="flex-fill" style="min-width:200px">
-      <label class="form-label small text-muted mb-1">Brand</label>
+      <label class="form-label small text-muted mb-1">Narrow by Brand</label>
       <select id="filterBrand" class="form-select">
         <option value="">All Brands</option>
       </select>
@@ -98,6 +103,7 @@ body{background:var(--bg);color:var(--ink);font-family:ui-sans-serif,system-ui,-
     <div class="flex-fill" style="min-width:180px">
       <label class="form-label small text-muted mb-1">Sort By</label>
       <select id="filterSort" class="form-select">
+        <option value="relevance">Most Relevant</option>
         <option value="newest">Newest First</option>
         <option value="price_asc">Price: Low to High</option>
         <option value="price_desc">Price: High to Low</option>
@@ -108,14 +114,14 @@ body{background:var(--bg);color:var(--ink);font-family:ui-sans-serif,system-ui,-
   </div>
 </section>
 
-<!-- Products Grid -->
+<!-- Search Results Grid -->
 <main class="container container-narrow my-3">
   <!-- Loader -->
   <div id="loader" style="display:none">
     <div class="spinner-border text-primary" role="status">
       <span class="visually-hidden">Loading...</span>
     </div>
-    <div class="mt-2 text-muted">Loading products...</div>
+    <div class="mt-2 text-muted">Searching...</div>
   </div>
 
   <!-- Products Grid -->
@@ -125,9 +131,10 @@ body{background:var(--bg);color:var(--ink);font-family:ui-sans-serif,system-ui,-
 
   <!-- Empty State -->
   <div id="emptyState" class="empty-state" style="display:none">
-    <i class="bi bi-inbox"></i>
+    <i class="bi bi-search"></i>
     <h5>No products found</h5>
-    <p class="text-muted">Try adjusting your filters or search query</p>
+    <p class="text-muted">Try different keywords or adjust your filters</p>
+    <a href="all_product.php" class="btn btn-primary">Browse All Products</a>
   </div>
 
   <!-- Pagination -->
@@ -145,10 +152,10 @@ body{background:var(--bg);color:var(--ink);font-family:ui-sans-serif,system-ui,-
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="../assets/js/products.js?v=2.1"></script>
 <script>
-/* Initialize products page */
+/* Initialize search results page */
 document.addEventListener('DOMContentLoaded', () => {
   if (typeof ProductsApp !== 'undefined') {
-    ProductsApp.init('all_product');
+    ProductsApp.init('search_results');
   }
 });
 </script>

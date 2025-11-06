@@ -203,4 +203,200 @@ class Product extends Database
             ? ['success'=>true,'message'=>'Product deleted']
             : ['success'=>false,'message'=>'Product not found'];
     }
+
+    /**
+     * View all products with optional pagination
+     * @param int $limit Number of products per page
+     * @param int $offset Starting position
+     * @return array
+     */
+    public function view_all_products(int $limit = 100, int $offset = 0): array
+    {
+        $sql = "SELECT p.product_id, p.product_cat, p.product_brand, p.product_title,
+                       p.product_price, p.product_desc, p.product_image, p.product_keywords,
+                       c.cat_name, b.brand_name
+                FROM products p
+                LEFT JOIN categories c ON p.product_cat = c.cat_id
+                LEFT JOIN brands b ON p.product_brand = b.brand_id
+                ORDER BY p.product_id DESC
+                LIMIT ? OFFSET ?";
+        $stmt = $this->conn->prepare($sql);
+        if (!$stmt) return ['success'=>false,'message'=>'DB prepare failed.'];
+        $stmt->bind_param('ii', $limit, $offset);
+        if (!$stmt->execute()) { 
+            $stmt->close(); 
+            return ['success'=>false,'message'=>'DB execute failed.']; 
+        }
+        $rows = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+        $stmt->close();
+
+        // Get total count for pagination
+        $countSql = "SELECT COUNT(*) as total FROM products";
+        $countResult = $this->conn->query($countSql);
+        $total = $countResult ? $countResult->fetch_assoc()['total'] : 0;
+
+        return ['success'=>true,'data'=>$rows,'total'=>(int)$total];
+    }
+
+    /**
+     * Search products by query string (searches title, description, keywords)
+     * @param string $query Search term
+     * @param int $limit Number of results
+     * @param int $offset Starting position
+     * @return array
+     */
+    public function search_products(string $query, int $limit = 100, int $offset = 0): array
+    {
+        $searchTerm = '%' . $query . '%';
+        $sql = "SELECT p.product_id, p.product_cat, p.product_brand, p.product_title,
+                       p.product_price, p.product_desc, p.product_image, p.product_keywords,
+                       c.cat_name, b.brand_name
+                FROM products p
+                LEFT JOIN categories c ON p.product_cat = c.cat_id
+                LEFT JOIN brands b ON p.product_brand = b.brand_id
+                WHERE p.product_title LIKE ? 
+                   OR p.product_desc LIKE ? 
+                   OR p.product_keywords LIKE ?
+                ORDER BY p.product_id DESC
+                LIMIT ? OFFSET ?";
+        $stmt = $this->conn->prepare($sql);
+        if (!$stmt) return ['success'=>false,'message'=>'DB prepare failed.'];
+        $stmt->bind_param('sssii', $searchTerm, $searchTerm, $searchTerm, $limit, $offset);
+        if (!$stmt->execute()) { 
+            $stmt->close(); 
+            return ['success'=>false,'message'=>'DB execute failed.']; 
+        }
+        $rows = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+        $stmt->close();
+
+        // Get total count for pagination
+        $countSql = "SELECT COUNT(*) as total FROM products p 
+                     WHERE p.product_title LIKE ? 
+                        OR p.product_desc LIKE ? 
+                        OR p.product_keywords LIKE ?";
+        $countStmt = $this->conn->prepare($countSql);
+        $total = 0;
+        if ($countStmt) {
+            $countStmt->bind_param('sss', $searchTerm, $searchTerm, $searchTerm);
+            if ($countStmt->execute()) {
+                $total = $countStmt->get_result()->fetch_assoc()['total'];
+            }
+            $countStmt->close();
+        }
+
+        return ['success'=>true,'data'=>$rows,'total'=>(int)$total,'query'=>$query];
+    }
+
+    /**
+     * Filter products by category
+     * @param int $cat_id Category ID
+     * @param int $limit Number of results
+     * @param int $offset Starting position
+     * @return array
+     */
+    public function filter_products_by_category(int $cat_id, int $limit = 100, int $offset = 0): array
+    {
+        $sql = "SELECT p.product_id, p.product_cat, p.product_brand, p.product_title,
+                       p.product_price, p.product_desc, p.product_image, p.product_keywords,
+                       c.cat_name, b.brand_name
+                FROM products p
+                LEFT JOIN categories c ON p.product_cat = c.cat_id
+                LEFT JOIN brands b ON p.product_brand = b.brand_id
+                WHERE p.product_cat = ?
+                ORDER BY p.product_id DESC
+                LIMIT ? OFFSET ?";
+        $stmt = $this->conn->prepare($sql);
+        if (!$stmt) return ['success'=>false,'message'=>'DB prepare failed.'];
+        $stmt->bind_param('iii', $cat_id, $limit, $offset);
+        if (!$stmt->execute()) { 
+            $stmt->close(); 
+            return ['success'=>false,'message'=>'DB execute failed.']; 
+        }
+        $rows = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+        $stmt->close();
+
+        // Get total count
+        $countSql = "SELECT COUNT(*) as total FROM products WHERE product_cat = ?";
+        $countStmt = $this->conn->prepare($countSql);
+        $total = 0;
+        if ($countStmt) {
+            $countStmt->bind_param('i', $cat_id);
+            if ($countStmt->execute()) {
+                $total = $countStmt->get_result()->fetch_assoc()['total'];
+            }
+            $countStmt->close();
+        }
+
+        return ['success'=>true,'data'=>$rows,'total'=>(int)$total,'category_id'=>$cat_id];
+    }
+
+    /**
+     * Filter products by brand
+     * @param int $brand_id Brand ID
+     * @param int $limit Number of results
+     * @param int $offset Starting position
+     * @return array
+     */
+    public function filter_products_by_brand(int $brand_id, int $limit = 100, int $offset = 0): array
+    {
+        $sql = "SELECT p.product_id, p.product_cat, p.product_brand, p.product_title,
+                       p.product_price, p.product_desc, p.product_image, p.product_keywords,
+                       c.cat_name, b.brand_name
+                FROM products p
+                LEFT JOIN categories c ON p.product_cat = c.cat_id
+                LEFT JOIN brands b ON p.product_brand = b.brand_id
+                WHERE p.product_brand = ?
+                ORDER BY p.product_id DESC
+                LIMIT ? OFFSET ?";
+        $stmt = $this->conn->prepare($sql);
+        if (!$stmt) return ['success'=>false,'message'=>'DB prepare failed.'];
+        $stmt->bind_param('iii', $brand_id, $limit, $offset);
+        if (!$stmt->execute()) { 
+            $stmt->close(); 
+            return ['success'=>false,'message'=>'DB execute failed.']; 
+        }
+        $rows = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+        $stmt->close();
+
+        // Get total count
+        $countSql = "SELECT COUNT(*) as total FROM products WHERE product_brand = ?";
+        $countStmt = $this->conn->prepare($countSql);
+        $total = 0;
+        if ($countStmt) {
+            $countStmt->bind_param('i', $brand_id);
+            if ($countStmt->execute()) {
+                $total = $countStmt->get_result()->fetch_assoc()['total'];
+            }
+            $countStmt->close();
+        }
+
+        return ['success'=>true,'data'=>$rows,'total'=>(int)$total,'brand_id'=>$brand_id];
+    }
+
+    /**
+     * View single product with full details
+     * @param int $id Product ID
+     * @return array
+     */
+    public function view_single_product(int $id): array
+    {
+        $sql = "SELECT p.product_id, p.product_cat, p.product_brand, p.product_title,
+                       p.product_price, p.product_desc, p.product_image, p.product_keywords,
+                       c.cat_name, b.brand_name
+                FROM products p
+                LEFT JOIN categories c ON p.product_cat = c.cat_id
+                LEFT JOIN brands b ON p.product_brand = b.brand_id
+                WHERE p.product_id = ?";
+        $stmt = $this->conn->prepare($sql);
+        if (!$stmt) return ['success'=>false,'message'=>'DB prepare failed.'];
+        $stmt->bind_param('i', $id);
+        if (!$stmt->execute()) { 
+            $stmt->close(); 
+            return ['success'=>false,'message'=>'DB execute failed.']; 
+        }
+        $row = $stmt->get_result()->fetch_assoc();
+        $stmt->close();
+        if (!$row) return ['success'=>false,'message'=>'Product not found'];
+        return ['success'=>true,'data'=>$row];
+    }
 }

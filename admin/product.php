@@ -103,13 +103,12 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:ui-sans-serif,sy
   <aside class="sdbar">
     <div class="sdbar__brand"><span class="sdbar__title">Z's Page</span></div>
     <div class="sdbar__group">
-      <a class="sdbar__item" href="../index.php"><span class="sdbar__icon"><i class="bi bi-speedometer2"></i></span>Dashboard</a>
       <a class="sdbar__item" href="category.php"><span class="sdbar__icon"><i class="bi bi-folder2"></i></span>Category Management</a>
       <a class="sdbar__item" href="brand.php"><span class="sdbar__icon"><i class="bi bi-tags"></i></span>Brand Management</a>
       <a class="sdbar__item sdbar__item--active" href="product.php"><span class="sdbar__icon"><i class="bi bi-box-seam"></i></span>Product Management</a>
       <a class="sdbar__item" href="../view/all_product.php"><span class="sdbar__icon"><i class="bi bi-grid"></i></span>Product Display</a>
     </div>
-    <a class="sdbar__item sdbar__settings" href="#"><span class="sdbar__icon"><i class="bi bi-gear"></i></span>Settings</a>
+    <a class="sdbar__item sdbar__settings" href="../actions/logout.php"><span class="sdbar__icon"><i class="bi bi-box-arrow-right"></i></span>Logout</a>
   </aside>
 
   <!-- Main -->
@@ -121,7 +120,6 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:ui-sans-serif,sy
         <div class="page-sub">Create, organize, and manage your product catalog</div>
       </div>
       <div class="d-flex gap-2">
-  <a href="category.php" class="btn btn-outline-secondary btn-back"><i class="bi bi-arrow-left"></i> Back</a>
         <div class="btn-group">
           <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#productModal">
             <i class="bi bi-plus-lg me-1"></i> Add Product
