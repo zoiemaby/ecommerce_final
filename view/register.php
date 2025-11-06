@@ -136,45 +136,6 @@ label {
 .phone-wrap {
     position: relative;
 }
-
-/* Container for the radio group */
-.mb-4 {
-  margin: 15px 0;
-}
-
-/* Label "Register As" */
-.mb-4 .form-label {
-  display: block;
-  font-size: 1rem;
-  font-weight: 600;
-  color: #374151;
-  margin-bottom: 8px;
-}
-
-/* Flex container to place radios side by side */
-.radio-group {
-  display: flex;
-  gap: 60px;   /* spacing between options */
-  align-items: center;
-}
-
-/* Each radio option */
-.custom-radio {
-  display: flex;
-  align-items: center;
-  gap: 6px;   /* space between the circle and text */
-  cursor: pointer;
-  font-size: 0.9rem;
-  color: #1f2937;
-}
-
-/* Style the radio input */
-.custom-radio input[type="radio"] {
-  accent-color: hsl(158, 82%, 15%); /* modern browsers */
-  width: 16px;
-  height: 16px;
-  cursor: pointer;
-}
   </style>
 </head>
 <body>
@@ -238,20 +199,8 @@ label {
       <input type="hidden" id="fullPhone" name="full_phone_e164">
       <input type="hidden" id="countryCodeInput" name="country_code">
       <input type="hidden" id="phoneLocalInput" name="phone_number">
-
-      <div class="mb-4">
-        <label class="form-label">Register As</label>
-        <div class="radio-group">
-            <div class="custom-radio">
-        <input class="form-check-input" type="radio" name="role" id="customer" value="2">
-                <label class="form-check-label" for="customer">Customer</label>
-            </div>
-            <div class="custom-radio">
-        <input class="form-check-input" type="radio" name="role" id="owner" value="1" checked>
-                <label class="form-check-label" for="owner">Restaurant Owner</label>
-            </div>
-        </div>
-    </div>
+      <!-- Role is automatically set to 2 (Customer) at SQL level -->
+      <input type="hidden" name="role" value="2">
 
       <button type="submit" class="btn">
         <span id="registerBtnText">Register</span>

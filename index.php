@@ -28,10 +28,13 @@ require_once 'settings/core.php';
 
           <?php else: ?>
             <?php if (isAdmin()): ?>
-              <li><a href="actions/logout.php">Logout</a></li>
               <li><a href="admin/category.php">Category</a></li>
               <li><a href="admin/brand.php">Brand</a></li>
+              <li><a href="admin/product.php">Product</a></li>
+              <li><a href="actions/logout.php">Logout</a></li>
             <?php else: ?>
+              <li><a href="view/register.php">Register</a></li>
+              <li><a href="view/all_product.php">Products</a></li>
               <li><a href="actions/logout.php">Logout</a></li>
             <?php endif; ?>
           <?php endif; ?>
