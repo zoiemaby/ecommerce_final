@@ -107,17 +107,8 @@ const ProductsApp = (function() {
 
     loadSingleProduct(productId);
 
-    // Add to cart handler
-    $('#btnAddToCart').on('click', () => {
-      Swal.fire({
-        icon: 'info',
-        title: 'Coming Soon!',
-        text: 'Add to Cart functionality will be implemented in the next phase.',
-        confirmButtonColor: 'hsl(158, 82%, 15%)',
-        confirmButtonText: 'Got it!'
-      });
-      // TODO: Implement cart functionality
-    });
+    // Note: Add-to-cart is handled centrally by cart.js which binds to
+    // the .add-to-cart-btn class used on #btnAddToCart. No extra handler here.
 
     $('#btnWishlist').on('click', () => {
       Swal.fire({

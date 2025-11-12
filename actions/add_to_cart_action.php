@@ -65,6 +65,9 @@ if (empty($input)) {
 $productId = isset($input['product_id']) ? (int)$input['product_id'] : 0;
 $quantity = isset($input['quantity']) ? (int)$input['quantity'] : 1;
 
+// Debug log incoming request parameters and session state
+error_log('add_to_cart_action.php - Incoming add request: productId=' . $productId . ' quantity=' . $quantity . ' customerId=' . ($customerId ?? 'NULL') . ' session_id=' . session_id());
+
 // Validate product ID
 if ($productId <= 0) {
     respond(false, 'Invalid product ID', null, 400);
@@ -97,9 +100,6 @@ if (function_exists('view_single_product_ctr')) {
         } elseif (is_array($productData) && isset($productData['product_title'])) {
             $productInfo = $productData;
         }
-    } catch (Exception $e) {
-        error_log('add_to_cart_action.php - Product validation failed: ' . $e->getMessage());
-        // Continue anyway - cart_controller will handle invalid products
     }
 }
 
@@ -111,7 +111,33 @@ try {
     $result = add_to_cart_ctr($productId, $customerId, $quantity);
     
     if ($result === false) {
-        respond(false, 'Failed to add item to cart. Please try again.', null, 500);
+        // Enhanced diagnostics to help identify live server failure
+        $dbError = null;
+        // We cannot access protected connection property directly; rely on mysqli_ping via global connection if available
+        if (isset($GLOBALS['conn']) && $GLOBALS['conn'] instanceof mysqli) {
+            if (!@mysqli_ping($GLOBALS['conn'])) {
+                $dbError = 'Ping failed: ' . $GLOBALS['conn']->error;
+            } else {
+                $dbError = $GLOBALS['conn']->error ?: null;
+            }
+        }
+
+        // Check if product already exists (could indicate updateCartQuantity failure)
+        $preExisting = product_exists_in_cart_ctr($customerId, $productId);
+        $existsFlag = $preExisting ? 'YES qty=' . ($preExisting['qty'] ?? '?') : 'NO';
+
+        error_log('add_to_cart_action.php - ADD FAILURE productId=' . $productId . ' customerId=' . $customerId . ' quantity=' . $quantity . ' exists=' . $existsFlag . ' dbError=' . ($dbError ?: 'NONE'));
+
+        respond(false, 'Failed to add item to cart. Please try again.', [
+            'diagnostic' => [
+                'product_id' => $productId,
+                'customer_id' => $customerId,
+                'quantity' => $quantity,
+                'already_existed' => (bool)$preExisting,
+                'db_error' => $dbError,
+                'session_id' => session_id()
+            ]
+        ], 500);
     }
     
     // Get updated cart count
@@ -149,8 +175,5 @@ try {
     
     respond(true, $message, $responseData, 200);
     
-} catch (Exception $e) {
-    error_log('add_to_cart_action.php - Exception: ' . $e->getMessage());
-    respond(false, 'An error occurred while adding to cart', null, 500);
 }
 ?>
