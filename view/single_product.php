@@ -155,7 +155,8 @@ body{background:var(--bg);color:var(--ink);font-family:ui-sans-serif,system-ui,-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="../assets/js/cart.js"></script>
+<?php $cartJsV = file_exists(__DIR__.'/../assets/js/cart.js') ? filemtime(__DIR__.'/../assets/js/cart.js') : time(); ?>
+<script src="../assets/js/cart.js?v=<?php echo $cartJsV; ?>"></script>
 <script src="../assets/js/products.js?v=2.1"></script>
 <script>
 /* Initialize single product page */

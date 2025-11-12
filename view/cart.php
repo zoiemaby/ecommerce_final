@@ -404,7 +404,8 @@ $pageTitle = 'Shopping Cart';
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <!-- Cart JS -->
-<script src="../assets/js/cart.js"></script>
+<?php $cartJsV = file_exists(__DIR__.'/../assets/js/cart.js') ? filemtime(__DIR__.'/../assets/js/cart.js') : time(); ?>
+<script src="../assets/js/cart.js?v=<?php echo $cartJsV; ?>"></script>
 
 <!-- Initialize cart state with server data -->
 <script>
