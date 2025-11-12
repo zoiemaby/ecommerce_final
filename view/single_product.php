@@ -44,7 +44,12 @@ body{background:var(--bg);color:var(--ink);font-family:ui-sans-serif,system-ui,-
         <li class="nav-item"><a class="nav-link" href="login.php">Login</a></li>
       </ul>
       <div class="d-flex gap-2">
-        <a href="#" class="btn btn-outline-dark"><i class="bi bi-cart3"></i> <span class="badge bg-danger" id="cartCount">0</span></a>
+        <a href="cart.php" class="btn btn-outline-dark position-relative">
+          <i class="bi bi-cart3"></i> Cart
+          <span class="cart-badge position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="display:none;">
+            0
+          </span>
+        </a>
       </div>
     </div>
   </div>
@@ -102,18 +107,35 @@ body{background:var(--bg);color:var(--ink);font-family:ui-sans-serif,system-ui,-
           <div id="productKeywords"></div>
         </div>
 
-        <div class="d-flex gap-3">
-          <button class="btn btn-dark btn-cart flex-fill" id="btnAddToCart">
-            <i class="bi bi-cart-plus me-2"></i>Add to Cart
-          </button>
-          <button class="btn btn-outline-secondary" id="btnWishlist" title="Add to Wishlist">
-            <i class="bi bi-heart"></i>
-          </button>
+        <!-- Quantity Selector -->
+        <div class="mb-4">
+          <h6 class="text-muted mb-2">Quantity</h6>
+          <div class="d-flex align-items-center gap-3">
+            <div class="btn-group" role="group">
+              <button type="button" class="btn btn-outline-secondary" id="decreaseQty">
+                <i class="bi bi-dash"></i>
+              </button>
+              <input type="number" id="productQuantity" class="form-control text-center" value="1" min="1" max="100" style="max-width: 80px;">
+              <button type="button" class="btn btn-outline-secondary" id="increaseQty">
+                <i class="bi bi-plus"></i>
+              </button>
+            </div>
+            <small class="text-muted">Max: 100</small>
+          </div>
         </div>
 
-        <div class="alert alert-info mt-4" role="alert">
-          <i class="bi bi-info-circle me-2"></i>
-          <strong>Note:</strong> Cart functionality is currently a placeholder and will be implemented soon.
+        <div class="d-flex gap-3">
+          <button class="btn btn-dark btn-cart flex-fill add-to-cart-btn" id="btnAddToCart" data-product-id="" data-quantity="1">
+            <i class="bi bi-cart-plus me-2"></i>Add to Cart
+          </button>
+          <a href="cart.php" class="btn btn-outline-dark">
+            <i class="bi bi-cart3"></i> View Cart
+          </a>
+        </div>
+
+        <div class="alert alert-success mt-4" role="alert">
+          <i class="bi bi-shield-check me-2"></i>
+          <strong>Secure Shopping:</strong> Safe checkout with SSL encryption.
         </div>
       </div>
     </div>
@@ -133,6 +155,7 @@ body{background:var(--bg);color:var(--ink);font-family:ui-sans-serif,system-ui,-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="../assets/js/cart.js"></script>
 <script src="../assets/js/products.js?v=2.1"></script>
 <script>
 /* Initialize single product page */
@@ -140,6 +163,35 @@ document.addEventListener('DOMContentLoaded', () => {
   if (typeof ProductsApp !== 'undefined') {
     ProductsApp.init('single_product');
   }
+
+  // Quantity controls
+  $('#decreaseQty').on('click', function() {
+    const input = $('#productQuantity');
+    const currentVal = parseInt(input.val()) || 1;
+    if (currentVal > 1) {
+      const newVal = currentVal - 1;
+      input.val(newVal);
+      $('#btnAddToCart').data('quantity', newVal);
+    }
+  });
+
+  $('#increaseQty').on('click', function() {
+    const input = $('#productQuantity');
+    const currentVal = parseInt(input.val()) || 1;
+    if (currentVal < 100) {
+      const newVal = currentVal + 1;
+      input.val(newVal);
+      $('#btnAddToCart').data('quantity', newVal);
+    }
+  });
+
+  $('#productQuantity').on('change', function() {
+    let val = parseInt($(this).val()) || 1;
+    if (val < 1) val = 1;
+    if (val > 100) val = 100;
+    $(this).val(val);
+    $('#btnAddToCart').data('quantity', val);
+  });
 });
 </script>
 </body>

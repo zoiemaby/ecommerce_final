@@ -56,7 +56,12 @@ body{background:var(--bg);color:var(--ink);font-family:ui-sans-serif,system-ui,-
           <input id="searchQuery" class="form-control" type="search" placeholder="Search products..." autocomplete="off">
         </div>
         <button class="btn btn-dark" type="button" id="btnSearch">Search</button>
-        <a href="#" class="btn btn-outline-dark"><i class="bi bi-cart3"></i> <span class="badge bg-danger" id="cartCount">0</span></a>
+        <a href="cart.php" class="btn btn-outline-dark position-relative">
+          <i class="bi bi-cart3"></i> Cart
+          <span class="cart-badge position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="display:none;">
+            0
+          </span>
+        </a>
       </form>
     </div>
   </div>
@@ -143,6 +148,7 @@ body{background:var(--bg);color:var(--ink);font-family:ui-sans-serif,system-ui,-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="../assets/js/cart.js"></script>
 <script src="../assets/js/products.js?v=2.1"></script>
 <script>
 /* Initialize products page */

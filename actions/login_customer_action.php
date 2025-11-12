@@ -32,12 +32,13 @@ if ($user === false) {
 }
 
 // Success – session variables should already be set by loginCustomer(),
-// but we’ll ensure important ones are there
-$_SESSION['user_id']    = $user['customer_id'];
-$_SESSION['user_email'] = $user['customer_email'];
-$_SESSION['user_name']  = $user['customer_name'];
-$_SESSION['user_role']  = $user['user_role'];
-$_SESSION['user_image'] = $user['customer_image'];
+// but we'll ensure important ones are there
+$_SESSION['user_id']      = $user['customer_id'];
+$_SESSION['customer_id']  = $user['customer_id']; // Also set customer_id for cart compatibility
+$_SESSION['user_email']   = $user['customer_email'];
+$_SESSION['user_name']    = $user['customer_name'];
+$_SESSION['user_role']    = $user['user_role'];
+$_SESSION['user_image']   = $user['customer_image'];
 
 send_json([
     'status'  => 'success',

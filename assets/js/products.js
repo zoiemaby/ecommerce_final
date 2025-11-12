@@ -421,12 +421,16 @@ const ProductsApp = (function() {
                 ${escapeHtml(product.product_title)}
               </a>
               <div class="mt-auto">
-                <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center justify-content-between mb-2">
                   <div class="price">GHS ${parseFloat(product.product_price).toFixed(2)}</div>
-                  <button class="btn btn-sm btn-outline-dark" type="button" onclick="ProductsApp.addToCart(${product.product_id})">
+                  <button class="btn btn-sm btn-dark add-to-cart-btn" type="button" 
+                          data-product-id="${product.product_id}" data-quantity="1">
                     <i class="bi bi-cart-plus"></i>
                   </button>
                 </div>
+                <a href="single_product.php?id=${product.product_id}" class="btn btn-sm btn-outline-dark w-100">
+                  <i class="bi bi-eye"></i> View Details
+                </a>
               </div>
             </div>
           </div>
@@ -626,23 +630,17 @@ const ProductsApp = (function() {
   }
 
   /**
-   * Add to cart (placeholder)
+   * Add to cart - now handled by cart.js
+   * This function is deprecated but kept for backwards compatibility
    */
   function addToCart(productId) {
-    Swal.fire({
-      icon: 'info',
-      title: 'Coming Soon!',
-      html: `Add to Cart functionality will be implemented soon!<br><small class="text-muted">Product ID: ${productId}</small>`,
-      confirmButtonColor: 'hsl(158, 82%, 15%)',
-      confirmButtonText: 'Got it!',
-      showClass: {
-        popup: 'animate__animated animate__fadeInDown'
-      },
-      hideClass: {
-        popup: 'animate__animated animate__fadeOutUp'
-      }
-    });
-    // TODO: Implement cart functionality
+    // Trigger the add-to-cart button click which is handled by cart.js
+    const btn = $(`.add-to-cart-btn[data-product-id="${productId}"]`).first();
+    if (btn.length) {
+      btn.trigger('click');
+    } else {
+      console.warn('[ProductsApp] Add to cart button not found for product:', productId);
+    }
   }
 
   /**

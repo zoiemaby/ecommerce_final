@@ -7,7 +7,8 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 function isLoggedIn(){
-    if (!isset($_SESSION['user_id'])) {
+    // Check for either user_id or customer_id for backwards compatibility
+    if (!isset($_SESSION['user_id']) && !isset($_SESSION['customer_id'])) {
         return false;
     } else {
         return true;
