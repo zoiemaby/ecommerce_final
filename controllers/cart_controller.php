@@ -22,7 +22,6 @@ function add_to_cart_ctr($productId, $customerId, $quantity = 1)
         $cart = new Cart();
         return $cart->addToCart($productId, $customerId, $quantity);
     } catch (Exception $e) {
-        error_log('add_to_cart_ctr exception: ' . $e->getMessage());
         return false;
     }
 }
@@ -42,7 +41,6 @@ function update_cart_quantity_ctr($productId, $customerId, $newQuantity)
         $cart = new Cart();
         return $cart->updateCartQuantity($productId, $customerId, $newQuantity);
     } catch (Exception $e) {
-        error_log('update_cart_quantity_ctr exception: ' . $e->getMessage());
         return false;
     }
 }
@@ -60,7 +58,6 @@ function remove_from_cart_ctr($productId, $customerId)
         $cart = new Cart();
         return $cart->removeFromCart($productId, $customerId);
     } catch (Exception $e) {
-        error_log('remove_from_cart_ctr exception: ' . $e->getMessage());
         return false;
     }
 }
@@ -77,7 +74,6 @@ function get_cart_items_ctr($customerId)
         $cart = new Cart();
         return $cart->getCartItems($customerId);
     } catch (Exception $e) {
-        error_log('get_cart_items_ctr exception: ' . $e->getMessage());
         return false;
     }
 }
@@ -94,7 +90,6 @@ function get_cart_summary_ctr($customerId)
         $cart = new Cart();
         return $cart->getCartSummary($customerId);
     } catch (Exception $e) {
-        error_log('get_cart_summary_ctr exception: ' . $e->getMessage());
         return false;
     }
 }
@@ -111,7 +106,6 @@ function empty_cart_ctr($customerId)
         $cart = new Cart();
         return $cart->emptyCart($customerId);
     } catch (Exception $e) {
-        error_log('empty_cart_ctr exception: ' . $e->getMessage());
         return false;
     }
 }
@@ -129,7 +123,6 @@ function product_exists_in_cart_ctr($customerId, $productId)
         $cart = new Cart();
         return $cart->productExistsInCart($customerId, $productId);
     } catch (Exception $e) {
-        error_log('product_exists_in_cart_ctr exception: ' . $e->getMessage());
         return false;
     }
 }
@@ -146,7 +139,6 @@ function get_cart_count_ctr($customerId)
         $cart = new Cart();
         return $cart->getCartCount($customerId);
     } catch (Exception $e) {
-        error_log('get_cart_count_ctr exception: ' . $e->getMessage());
         return 0;
     }
 }
@@ -163,7 +155,6 @@ function is_cart_empty_ctr($customerId)
         $cart = new Cart();
         return $cart->isCartEmpty($customerId);
     } catch (Exception $e) {
-        error_log('is_cart_empty_ctr exception: ' . $e->getMessage());
         return true; // Return true on error for safety
     }
 }
@@ -181,7 +172,6 @@ function get_cart_item_ctr($productId, $customerId)
         $cart = new Cart();
         return $cart->getCartItem($productId, $customerId);
     } catch (Exception $e) {
-        error_log('get_cart_item_ctr exception: ' . $e->getMessage());
         return false;
     }
 }

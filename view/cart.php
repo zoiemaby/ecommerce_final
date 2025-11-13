@@ -25,11 +25,6 @@ if (!isLoggedIn()) {
 // Get customer ID from session (check both customer_id and user_id for backwards compatibility)
 $customerId = isset($_SESSION['customer_id']) ? $_SESSION['customer_id'] : ($_SESSION['user_id'] ?? 0);
 
-// DEBUG - log what we found
-error_log('cart.php - Session customer_id: ' . ($_SESSION['customer_id'] ?? 'not set'));
-error_log('cart.php - Session user_id: ' . ($_SESSION['user_id'] ?? 'not set'));
-error_log('cart.php - Using customer ID: ' . $customerId);
-
 // Double-check customer ID is valid
 if ($customerId <= 0) {
     // Session exists but customer_id is missing - redirect to login

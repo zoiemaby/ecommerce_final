@@ -121,7 +121,6 @@ try {
     respond(true, $message, $responseData, 200);
     
 } catch (Exception $e) {
-    error_log('remove_from_cart_action.php - Exception: ' . $e->getMessage());
     respond(false, 'An error occurred while removing item from cart', null, 500);
 }
 ?>

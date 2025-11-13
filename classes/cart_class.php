@@ -48,14 +48,12 @@ class Cart extends Database
         $stmt = $this->conn->prepare($sql);
         
         if (!$stmt) {
-            error_log('productExistsInCart prepare failed: ' . $this->conn->error);
             return false;
         }
 
         $stmt->bind_param('ii', $productId, $customerId);
         
         if (!$stmt->execute()) {
-            error_log('productExistsInCart execute failed: ' . $stmt->error);
             $stmt->close();
             return false;
         }
@@ -85,7 +83,6 @@ class Cart extends Database
     {
         // Validate inputs
         if ($productId <= 0 || $customerId <= 0 || $quantity <= 0) {
-            error_log('addToCart: Invalid parameters');
             return false;
         }
 
@@ -103,7 +100,6 @@ class Cart extends Database
         $stmt = $this->conn->prepare($sql);
         
         if (!$stmt) {
-            error_log('addToCart prepare failed: ' . $this->conn->error);
             return false;
         }
 
@@ -114,7 +110,6 @@ class Cart extends Database
             $stmt->close();
             return $cartId;
         } else {
-            error_log('addToCart execute failed: ' . $stmt->error);
             $stmt->close();
             return false;
         }
@@ -139,7 +134,6 @@ class Cart extends Database
         $stmt = $this->conn->prepare($sql);
         
         if (!$stmt) {
-            error_log('updateCartQuantity prepare failed: ' . $this->conn->error);
             return false;
         }
 
@@ -150,7 +144,6 @@ class Cart extends Database
             $stmt->close();
             return $success;
         } else {
-            error_log('updateCartQuantity execute failed: ' . $stmt->error);
             $stmt->close();
             return false;
         }
@@ -169,7 +162,6 @@ class Cart extends Database
         $stmt = $this->conn->prepare($sql);
         
         if (!$stmt) {
-            error_log('removeFromCart prepare failed: ' . $this->conn->error);
             return false;
         }
 
@@ -180,7 +172,6 @@ class Cart extends Database
             $stmt->close();
             return $success;
         } else {
-            error_log('removeFromCart execute failed: ' . $stmt->error);
             $stmt->close();
             return false;
         }
@@ -217,14 +208,12 @@ class Cart extends Database
         $stmt = $this->conn->prepare($sql);
         
         if (!$stmt) {
-            error_log('getCartItems prepare failed: ' . $this->conn->error);
             return false;
         }
 
         $stmt->bind_param('i', $customerId);
         
         if (!$stmt->execute()) {
-            error_log('getCartItems execute failed: ' . $stmt->error);
             $stmt->close();
             return false;
         }
@@ -259,14 +248,12 @@ class Cart extends Database
         $stmt = $this->conn->prepare($sql);
         
         if (!$stmt) {
-            error_log('getCartSummary prepare failed: ' . $this->conn->error);
             return false;
         }
 
         $stmt->bind_param('i', $customerId);
         
         if (!$stmt->execute()) {
-            error_log('getCartSummary execute failed: ' . $stmt->error);
             $stmt->close();
             return false;
         }
@@ -294,7 +281,6 @@ class Cart extends Database
         $stmt = $this->conn->prepare($sql);
         
         if (!$stmt) {
-            error_log('emptyCart prepare failed: ' . $this->conn->error);
             return false;
         }
 
@@ -304,7 +290,6 @@ class Cart extends Database
             $stmt->close();
             return true; // Return true even if no items were deleted
         } else {
-            error_log('emptyCart execute failed: ' . $stmt->error);
             $stmt->close();
             return false;
         }
@@ -319,19 +304,16 @@ class Cart extends Database
     public function getCartCount($customerId)
     {
         $sql = "SELECT COUNT(*) as count FROM cart WHERE c_id = ?";
-        error_log('getCartCount - SQL: ' . $sql . ' | Customer ID: ' . $customerId);
         
         $stmt = $this->conn->prepare($sql);
         
         if (!$stmt) {
-            error_log('getCartCount prepare failed: ' . $this->conn->error);
             return 0;
         }
 
         $stmt->bind_param('i', $customerId);
         
         if (!$stmt->execute()) {
-            error_log('getCartCount execute failed: ' . $stmt->error);
             $stmt->close();
             return 0;
         }
@@ -340,8 +322,6 @@ class Cart extends Database
         $row = $result->fetch_assoc();
         $count = (int)$row['count'];
         $stmt->close();
-        
-        error_log('getCartCount - Found ' . $count . ' items for customer ' . $customerId);
         
         return $count;
     }
@@ -387,14 +367,12 @@ class Cart extends Database
         $stmt = $this->conn->prepare($sql);
         
         if (!$stmt) {
-            error_log('getCartItem prepare failed: ' . $this->conn->error);
             return false;
         }
 
         $stmt->bind_param('ii', $productId, $customerId);
         
         if (!$stmt->execute()) {
-            error_log('getCartItem execute failed: ' . $stmt->error);
             $stmt->close();
             return false;
         }

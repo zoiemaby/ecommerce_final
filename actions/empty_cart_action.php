@@ -106,7 +106,6 @@ try {
     respond(true, $message, $responseData, 200);
     
 } catch (Exception $e) {
-    error_log('empty_cart_action.php - Exception: ' . $e->getMessage());
     respond(false, 'An error occurred while emptying cart', null, 500);
 }
 ?>
