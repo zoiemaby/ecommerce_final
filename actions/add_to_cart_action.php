@@ -7,8 +7,27 @@
  * Returns JSON response for AJAX calls
  */
 
+// Enable error reporting for debugging
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+ini_set('log_errors', 0);
+
 // Set JSON header
 header('Content-Type: application/json');
+
+// Capture any errors that occur during includes
+set_error_handler(function($errno, $errstr, $errfile, $errline) {
+    echo json_encode([
+        'success' => false,
+        'message' => 'PHP Error: ' . $errstr,
+        'error_details' => [
+            'file' => $errfile,
+            'line' => $errline,
+            'type' => $errno
+        ]
+    ]);
+    exit;
+});
 
 // Start session if not already started
 if (session_status() === PHP_SESSION_NONE) {
@@ -66,10 +85,14 @@ if ($quantity <= 0 || $quantity > 100) {
 $existingItem = product_exists_in_cart_ctr($customerId, $productId);
 
 // Add to cart
-$result = add_to_cart_ctr($productId, $customerId, $quantity);
-
-if ($result === false) {
-    respond(false, 'Failed to add item to cart');
+try {
+    $result = add_to_cart_ctr($productId, $customerId, $quantity);
+    
+    if ($result === false) {
+        respond(false, 'Failed to add item to cart - database operation returned false');
+    }
+} catch (Exception $e) {
+    respond(false, 'Exception while adding to cart: ' . $e->getMessage());
 }
 
 // Get updated cart info

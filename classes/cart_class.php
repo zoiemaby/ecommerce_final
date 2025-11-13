@@ -16,22 +16,37 @@ class Cart extends Database
      */
     public function __construct()
     {
-        parent::__construct();
+        try {
+            parent::__construct();
 
-        // Get database connection
-        if (isset($this->conn) && $this->conn instanceof mysqli) {
-            $this->conn = $this->conn;
-        } else {
-            if (method_exists($this, 'getConnection')) {
-                $this->conn = $this->getConnection();
+            // Get database connection
+            if (isset($this->conn) && $this->conn instanceof mysqli) {
+                $this->conn = $this->conn;
             } else {
-                global $conn;
-                if (isset($conn) && $conn instanceof mysqli) {
-                    $this->conn = $conn;
+                if (method_exists($this, 'getConnection')) {
+                    $this->conn = $this->getConnection();
                 } else {
-                    throw new Exception('Database connection not available in cart_class.php');
+                    global $conn;
+                    if (isset($conn) && $conn instanceof mysqli) {
+                        $this->conn = $conn;
+                    } else {
+                        throw new Exception('Database connection not available in cart_class.php');
+                    }
                 }
             }
+            
+            // Verify connection is valid
+            if (!$this->conn || !($this->conn instanceof mysqli)) {
+                throw new Exception('Invalid database connection object in cart_class.php');
+            }
+            
+            // Test connection
+            if ($this->conn->connect_error) {
+                throw new Exception('Database connection error: ' . $this->conn->connect_error);
+            }
+        } catch (Exception $e) {
+            // Re-throw with more context
+            throw new Exception('Cart class initialization failed: ' . $e->getMessage());
         }
     }
 
